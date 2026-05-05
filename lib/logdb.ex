@@ -1,7 +1,7 @@
 defmodule LogDB do
-  def publish(name, type, payload, meta \\ %{}) do
+  def publish(name, type, payload, opts \\ []) do
     with_transport(name, fn mod, state ->
-      mod.publish(state, type, payload, meta)
+      mod.publish(state, type, payload, opts)
     end)
   end
 

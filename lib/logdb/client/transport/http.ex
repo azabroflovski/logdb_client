@@ -36,13 +36,14 @@ defmodule LogDB.Client.Transport.HTTP do
     :ok
   end
 
-  def publish(state, type, payload, meta) do
+  def publish(state, type, payload, opts \\ []) do
     body = %{
       events: [
         %{
           type: type,
           payload: payload,
-          meta: meta
+          meta: Keyword.get(opts, :meta, %{}),
+          stream: Keyword.get(opts, :stream, "default")
         }
       ]
     }

@@ -4,7 +4,7 @@ defmodule LogdbClient.MixProject do
   def project do
     [
       app: :logdb_client,
-      version: "0.2.2",
+      version: "0.2.3",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -15,7 +15,7 @@ defmodule LogdbClient.MixProject do
 
   def application do
     [
-      # mod: {LogDB.Application, []},
+      mod: {LogDB.Application, []},
       extra_applications: [:logger]
     ]
   end

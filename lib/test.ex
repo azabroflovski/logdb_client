@@ -11,12 +11,12 @@ defmodule MyApp.MyConsumer do
   end
 
   def handle_event(type, payload, meta, state) do
-    IO.inspect("handle_event")
-    IO.inspect(type)
-    IO.inspect(payload)
-    IO.inspect(meta)
-    IO.inspect("-----------")
-    {:ack, state}
+    # IO.inspect("handle_event")
+    # IO.inspect(type)
+    # IO.inspect(payload)
+    # IO.inspect(meta)
+    # IO.inspect("-----------")
+    # {:ack, state}
   end
 
   def handle_error(type, error) do
