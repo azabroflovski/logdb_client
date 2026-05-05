@@ -21,6 +21,10 @@ defmodule LogDB.Client.Transport.Hybrid do
     LogDB.Client.Transport.HTTP.publish(state.http_state, type, payload, meta)
   end
 
+  def publish_batch(state, events) do
+    LogDB.Client.Transport.HTTP.publish_batch(state.http_state, events)
+  end
+
   def ack(state, ids) do
     LogDB.Client.Transport.HTTP.ack(state.http_state, ids)
   end

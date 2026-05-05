@@ -5,6 +5,12 @@ defmodule LogDB do
     end)
   end
 
+  def publish_batch(name, events) do
+    with_transport(name, fn mod, state ->
+      mod.publish_batch(state, events)
+    end)
+  end
+
   def ack(name, ids) do
     with_transport(name, fn mod, state ->
       mod.ack(state, ids)

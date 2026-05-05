@@ -53,6 +53,17 @@ defmodule LogDB.Client.Transport.HTTP do
     end
   end
 
+  def publish_batch(state, events) do
+    body = %{
+      events: events
+    }
+
+    case Req.post("#{state.url}/events", json: body, auth: {:bearer, state.token}) do
+      {:ok, response} -> response
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
   def ack(state, ids) do
     body = %{
       ids: ids
