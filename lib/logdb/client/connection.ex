@@ -44,6 +44,13 @@ defmodule LogDB.Client.Connection do
     end
   end
 
+  def handle_info({:transport_status, status}, state) do
+    send(state.worker_name, {:transport_status, status})
+
+    new_connected = if status == :disconnected, do: false, else: state.connected
+    {:noreply, %{state | connected: new_connected}}
+  end
+
   def handle_info({:logdb_event, type, raw_payload, meta}, state) do
     GenServer.cast(state.worker_name, {:process_event, type, raw_payload, meta})
     {:noreply, state}

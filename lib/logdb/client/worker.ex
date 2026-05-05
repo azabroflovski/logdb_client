@@ -49,4 +49,23 @@ defmodule LogDB.Client.Worker do
         {:noreply, state}
     end
   end
+
+  def handle_info({:transport_status, status}, state) do
+    new_user_state =
+      case status do
+        :connected ->
+          {:ok, user_state} = state.consumer_mod.handle_connect(state.user_state)
+          user_state
+
+        :ready ->
+          {:ok, user_state} = state.consumer_mod.handle_ready(state.user_state)
+          user_state
+
+        :disconnected ->
+          {:ok, user_state} = state.consumer_mod.handle_disconnect(:lost, state.user_state)
+          user_state
+      end
+
+    {:noreply, %{state | user_state: new_user_state}}
+  end
 end

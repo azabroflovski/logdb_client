@@ -6,6 +6,8 @@ defmodule LogDB.Client.Transport.WebSocket do
 
   use WebSockex
 
+  @ping_interval 5_000
+
   def build_connection_link(opts) do
     connection = ConnectionConfig.from(opts)
 
@@ -44,6 +46,15 @@ defmodule LogDB.Client.Transport.WebSocket do
     :ok
   end
 
+  def handle_connect(_conn, state) do
+    Logger.info("[LogDB] WebSocket Connected")
+
+    send(state.parent, {:transport_status, :connected})
+    send(state.parent, {:transport_status, :ready})
+
+    {:ok, state}
+  end
+
   # NOTE: implement
   #
   # def publish(_pid, _type, _payload, _meta) do
@@ -66,8 +77,9 @@ defmodule LogDB.Client.Transport.WebSocket do
   # end
 
   def handle_disconnect(reason, state) do
-    IO.inspect(reason)
-    Logger.warning("[LogDB] Disconnected")
+    Logger.warning("[LogDB] Disconnected: #{inspect(reason)}")
+    send(state.parent, {:transport_status, :disconnected})
+    {:ok, state}
   end
 
   def handle_frame({:text, msg}, state) do

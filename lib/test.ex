@@ -5,6 +5,11 @@ defmodule MyApp.MyConsumer do
     {:ok, %{processed: 0}}
   end
 
+  def handle_connect(state) do
+    IO.inspect("CONSUMER LEVEL HANDLE CONNECT")
+    {:ok, state}
+  end
+
   def handle_event(type, payload, meta, state) do
     IO.inspect("handle_event")
     IO.inspect(type)
