@@ -14,11 +14,13 @@ defmodule LogDB.Client.Transport.Erlangd do
 
     Node.connect(node)
 
-    consumer_opts = [
-      consumer_id: Keyword.get(opts, :consumer_id),
-      stream: Keyword.get(opts, :stream, "default"),
-      owner: self()
-    ]
+    consumer_opts =
+      [
+        consumer_id: Keyword.get(opts, :consumer_id),
+        stream: Keyword.get(opts, :stream),
+        owner: self()
+      ]
+      |> Enum.reject(fn {_k, v} -> is_nil(v) end)
 
     try do
       case :erpc.call(node, LogDB.API.Erlangd.Connection, :open, [token, consumer_opts]) do
@@ -41,6 +43,10 @@ defmodule LogDB.Client.Transport.Erlangd do
 
     GenServer.cast(state.remote_pid, :close)
     :ok
+  end
+
+  def subscribe(state, stream, consumer_id) do
+    GenServer.call(state.remote_pid, {:subscribe, stream, consumer_id})
   end
 
   def publish(state, type, payload, opts \\ []) do

@@ -44,15 +44,34 @@ defmodule LogDB.Client.Connection do
     end
   end
 
+  # def handle_info({:transport_status, status}, state) do
+  #   send(state.worker_name, {:transport_status, status})
+  #
+  #   new_connected = if status == :disconnected, do: false, else: state.connected
+  #   {:noreply, %{state | connected: new_connected}}
+  # end
+  #
+  # def handle_info({:logdb_event, type, raw_payload, meta}, state) do
+  #   GenServer.cast(state.worker_name, {:process_event, type, raw_payload, meta})
+  #   {:noreply, state}
+  # end
+
   def handle_info({:transport_status, status}, state) do
-    send(state.worker_name, {:transport_status, status})
+    if pid = Process.whereis(state.worker_name) do
+      send(pid, {:transport_status, status})
+    end
 
     new_connected = if status == :disconnected, do: false, else: state.connected
     {:noreply, %{state | connected: new_connected}}
   end
 
   def handle_info({:logdb_event, type, raw_payload, meta}, state) do
-    GenServer.cast(state.worker_name, {:process_event, type, raw_payload, meta})
+    if pid = Process.whereis(state.worker_name) do
+      GenServer.cast(pid, {:process_event, type, raw_payload, meta})
+    else
+      Logger.debug("[LogDB] Received event, but no consumer worker is running. Dropping.")
+    end
+
     {:noreply, state}
   end
 

@@ -17,6 +17,10 @@ defmodule LogDB.Client.Transport.Hybrid do
     LogDB.Client.Transport.WebSocket.disconnect(state.ws_pid)
   end
 
+  def subscribe(state, stream, consumer_id) do
+    LogDB.Client.Transport.WebSocket.subscribe(state.ws_pid, stream, consumer_id)
+  end
+
   def publish(state, type, payload, opts \\ []) do
     LogDB.Client.Transport.HTTP.publish(state.http_state, type, payload, opts)
   end

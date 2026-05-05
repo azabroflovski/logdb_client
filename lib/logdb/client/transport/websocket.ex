@@ -11,10 +11,13 @@ defmodule LogDB.Client.Transport.WebSocket do
   def build_connection_link(opts) do
     connection = ConnectionConfig.from(opts)
 
-    query_params = %{
-      consumer_id: Keyword.get(opts, :consumer_id),
-      stream: Keyword.get(opts, :stream)
-    }
+    query_params =
+      %{
+        consumer_id: Keyword.get(opts, :consumer_id),
+        stream: Keyword.get(opts, :stream)
+      }
+      |> Enum.reject(fn {_k, v} -> is_nil(v) end)
+      |> Map.new()
 
     uri = %URI{
       scheme: if(connection.secure, do: "wss", else: "ws"),
@@ -53,6 +56,19 @@ defmodule LogDB.Client.Transport.WebSocket do
     send(state.parent, {:transport_status, :ready})
 
     {:ok, state}
+  end
+
+  def subscribe(pid, stream, consumer_id) do
+    msg = %{
+      "cmd" => "subscribe",
+      "params" => %{
+        "stream" => stream,
+        "consumer_id" => consumer_id
+      }
+    }
+
+    WebSockex.send_frame(pid, {:text, Jason.encode!(msg)})
+    :ok
   end
 
   # NOTE: implement

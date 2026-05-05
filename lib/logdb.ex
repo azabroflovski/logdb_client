@@ -11,6 +11,12 @@ defmodule LogDB do
     end)
   end
 
+  def subscribe(name, stream, consumer_id) do
+    with_transport(name, fn mod, state ->
+      mod.subscribe(state, stream, consumer_id)
+    end)
+  end
+
   def ack(name, ids) do
     with_transport(name, fn mod, state ->
       mod.ack(state, ids)

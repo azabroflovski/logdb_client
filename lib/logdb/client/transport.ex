@@ -4,6 +4,8 @@ defmodule LogDB.Client.Transport do
 
   @callback connect(opts) :: {:ok, state} | {:error, term()}
   @callback disconnect(state) :: :ok
+  @callback subscribe(state :: term(), stream :: String.t(), consumer_id :: String.t()) ::
+              :ok | {:error, term()}
   @callback publish(state, type :: String.t(), payload :: binary(), meta :: map()) ::
               :ok | {:error, term()}
   @callback ack(state, type :: String.t(), payload :: binary(), meta :: map()) ::
