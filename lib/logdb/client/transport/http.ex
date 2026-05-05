@@ -48,7 +48,7 @@ defmodule LogDB.Client.Transport.HTTP do
     }
 
     case Req.post("#{state.url}/events", json: body, auth: {:bearer, state.token}) do
-      {:ok, response} -> response
+      {:ok, response} -> {:ok, response}
       {:error, reason} -> {:error, reason}
     end
   end
@@ -59,7 +59,7 @@ defmodule LogDB.Client.Transport.HTTP do
     }
 
     case Req.post("#{state.url}/events", json: body, auth: {:bearer, state.token}) do
-      {:ok, response} -> response
+      {:ok, response} -> {:ok, response}
       {:error, reason} -> {:error, reason}
     end
   end
