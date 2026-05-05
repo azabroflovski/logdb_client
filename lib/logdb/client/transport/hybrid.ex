@@ -17,8 +17,8 @@ defmodule LogDB.Client.Transport.Hybrid do
     LogDB.Client.Transport.WebSocket.disconnect(state.ws_pid)
   end
 
-  def publish(state, type, payload, meta) do
-    LogDB.Client.Transport.HTTP.publish(state.http_state, type, payload, meta)
+  def publish(state, type, payload, opts \\ []) do
+    LogDB.Client.Transport.HTTP.publish(state.http_state, type, payload, opts)
   end
 
   def publish_batch(state, events) do

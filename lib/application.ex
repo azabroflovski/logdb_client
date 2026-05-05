@@ -11,11 +11,12 @@ defmodule LogDB.Application do
       {MyApp.MyConsumer,
        [
          name: :logdb,
-         connection: "logdb://127.0.0.1:4444?node_name=logdb",
-         token: "Ti2vG2pEejRSkyihPtfvIpJMgG5Nki58xuEilRwGRjY",
-         consumer_id: "YmNhNTE3YmItYmMzZS00ZTg3LTk5NjctOTE3ODZiZjYwYWE0OnJrcF9jb3Jl",
+         connection: "logdb://127.0.0.1:4000?node_name=logdb",
+         token: "aSQ3XgxxG6o0QsH2hgKjOV-50DYA0IeMPA99GvNgUfU",
+         consumer_id: "NDJlOWMxOWYtNzVlNC00ZjIxLWFjNDQtMTYzZWJhMzIzMDIzOmdheV9jb25zdW1lcg",
          stream: "default",
-         transport: LogDB.Client.Transport.Hybrid
+         transport: LogDB.Client.Transport.Erlangd,
+         parser: LogDB.Client.Parser.Erlangd
        ]}
     ]
 

@@ -43,8 +43,8 @@ defmodule LogDB.Client.Transport.Erlangd do
     :ok
   end
 
-  def publish(state, type, payload, meta) do
-    GenServer.call(state.remote_pid, {:publish, type, payload, meta})
+  def publish(state, type, payload, opts \\ []) do
+    GenServer.call(state.remote_pid, {:publish, type, payload, opts})
   end
 
   def ack(state, ids) do

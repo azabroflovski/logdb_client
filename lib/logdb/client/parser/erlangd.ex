@@ -9,16 +9,15 @@ defmodule LogDB.Client.Parser.Erlangd do
     end
   end
 
-  # 131 - detect for erlang term
   def decode(<<131, _rest::binary>> = payload) do
     case safe_decode(payload) do
-      {:ok, term} -> {:ok, term}
-      {:error, _reason} -> {:ok, payload}
+      {:ok, term} -> term
+      {:error, _reason} -> payload
     end
   end
 
   def decode(payload) when is_binary(payload) do
-    {:ok, payload}
+    payload
   end
 
   def decode(_), do: {:error, :not_a_binary}
