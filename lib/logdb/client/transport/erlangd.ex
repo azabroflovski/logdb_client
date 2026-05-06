@@ -53,6 +53,10 @@ defmodule LogDB.Client.Transport.Erlangd do
     GenServer.call(state.remote_pid, {:publish, type, payload, opts})
   end
 
+  def publish_batch(state, events) do
+    GenServer.call(state.remote_pid, {:publish_batch, events})
+  end
+
   def ack(state, ids) do
     GenServer.call(state.remote_pid, {:ack, ids})
   end
