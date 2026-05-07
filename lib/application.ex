@@ -14,9 +14,7 @@ defmodule LogDB.Application do
          connection: "logdb://127.0.0.1:4000?node_name=logdb",
          token: "aSQ3XgxxG6o0QsH2hgKjOV-50DYA0IeMPA99GvNgUfU",
          consumer_id: "NDJlOWMxOWYtNzVlNC00ZjIxLWFjNDQtMTYzZWJhMzIzMDIzOmdheV9jb25zdW1lcg",
-         stream: "default",
-         transport: LogDB.Client.Transport.Erlangd,
-         parser: LogDB.Client.Parser.Erlangd
+         transport: LogDB.Client.Transport.Erlangd
        ]},
       {LogDB.Client.Supervisor,
        [

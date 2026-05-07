@@ -44,8 +44,14 @@ defmodule LogDB.Client.Worker do
           {:noreply, %{state | user_state: new_user_state}}
       end
     rescue
-      e ->
-        state.consumer_mod.handle_error(type, e)
+      error ->
+        event = %{
+          "type" => type,
+          "payload" => payload,
+          "meta" => meta
+        }
+
+        state.consumer_mod.handle_error(error, event)
         {:noreply, state}
     end
   end

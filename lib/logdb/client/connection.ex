@@ -126,3 +126,6 @@ defmodule LogDB.Client.Connection do
     Process.send_after(self(), :connect, delay)
   end
 end
+
+defmodule Role do
+end

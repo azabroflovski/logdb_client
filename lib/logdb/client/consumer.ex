@@ -7,7 +7,7 @@ defmodule LogDB.Client.Consumer do
   @callback handle_event(type :: String.t(), payload :: term(), meta :: map(), state :: term()) ::
               {:ack, term()} | {:defer, term()}
 
-  @callback handle_error(type :: String.t(), error :: term()) :: any()
+  @callback handle_error(error :: term(), event :: term()) :: any()
 
   defmacro __using__(_opts) do
     quote do
@@ -27,8 +27,9 @@ defmodule LogDB.Client.Consumer do
       def handle_ready(state), do: {:ok, state}
       def handle_disconnect(_reason, state), do: {:ok, state}
 
-      def handle_error(type, error) do
-        Logger.error("LogDB event error [#{type}]: #{inspect(error)}")
+      def handle_error(error, event) do
+        type = event["type"]
+        Logger.error("[LogDB] consumer error [#{type}]: #{inspect(error)}")
       end
 
       defoverridable init: 1,
