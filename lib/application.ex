@@ -8,13 +8,14 @@ defmodule LogDB.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Так создается консьюмер
       {MyApp.MyConsumer,
        [
          name: :logdb,
          connection: "logdb://127.0.0.1:4000?node_name=logdb",
          token: "aSQ3XgxxG6o0QsH2hgKjOV-50DYA0IeMPA99GvNgUfU",
          consumer_id: "NDJlOWMxOWYtNzVlNC00ZjIxLWFjNDQtMTYzZWJhMzIzMDIzOmdheV9jb25zdW1lcg",
-         transport: LogDB.Client.Transport.Erlangd
+         transport: LogDB.Client.Transport.Hybrid
        ]},
       {LogDB.Client.Supervisor,
        [

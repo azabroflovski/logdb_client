@@ -55,6 +55,18 @@ defmodule LogDB.Client.Transport.WebSocket do
     send(state.parent, {:transport_status, :connected})
     send(state.parent, {:transport_status, :ready})
 
+    schedule_ping()
+
+    {:ok, state}
+  end
+
+  def handle_info(:send_ping, state) do
+    schedule_ping()
+
+    {:reply, {:text, "ping"}, state}
+  end
+
+  def handle_info(_message, state) do
     {:ok, state}
   end
 
@@ -98,6 +110,10 @@ defmodule LogDB.Client.Transport.WebSocket do
     {:ok, state}
   end
 
+  def handle_frame({:text, "pong"}, state) do
+    {:ok, state}
+  end
+
   def handle_frame({:text, msg}, state) do
     %{"type" => type, "payload" => payload, "meta" => meta} = Jason.decode!(msg)
 
@@ -106,7 +122,7 @@ defmodule LogDB.Client.Transport.WebSocket do
     {:ok, state}
   end
 
-  def handle_frame({:ping, _}, state) do
-    {:reply, :pong, state}
+  defp schedule_ping do
+    Process.send_after(self(), :send_ping, @ping_interval)
   end
 end
